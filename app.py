@@ -252,7 +252,35 @@ def full_message_history(self):
             self.save_ai_metadata_func(ai_name, ai_role, ai_goals)
         self.update_ai_list()
         self.display_current_ai_info(ai_name, ai_role, ', '.join(ai_goals))
-        
+
+def save_ai_instance_role_and_goals_func(self):
+    # Get the AI name, role, and goals from the GUI widgets
+    ai_name = self.ai_name_entry.get()
+    ai_role = self.ai_role_entry.get()
+    ai_goals = self.ai_goals_entry.get()
+
+    # Save the AI metadata to Pinecone
+    try:
+        # Get the AI vector from Pinecone
+        ai_vector = load_ai_instance_memory(ai_name)
+
+        # Add the AI metadata to the vector
+        ai_vector['name'] = ai_name
+        ai_vector['role'] = ai_role
+        ai_vector['goals'] = ai_goals
+
+        # Save the updated vector to Pinecone
+        save_ai_instance_role_and_goals(ai_name, ai_vector, ai_role, ai_goals)
+
+        # Update the AI list dropdown with the new AI name
+        self.ai_list_dropdown['values'] = get_ai_list()
+        self.ai_list_dropdown.current(0)
+
+        # Show a success message
+        messagebox.showinfo("Success", "AI metadata saved successfully.")
+    except Exception as e:
+        # Show an error message
+        messagebox.showerror("Error", f"Error saving AI metadata: {str(e)}")       
 
 
 def main():
