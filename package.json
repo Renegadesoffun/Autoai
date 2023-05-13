@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@azure/functions": "^3.5.1",
+    "dqn": "^0.0.0",
+    "flask": "^0.2.10"
+  }
+}
